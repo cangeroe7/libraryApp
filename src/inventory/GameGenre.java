@@ -1,6 +1,6 @@
 package inventory;
 
-public enum VideoGameGenre {
+public enum GameGenre {
     ACTION,
     ADVENTURE,
     RPG,
