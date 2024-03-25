@@ -20,7 +20,10 @@ public class Movie extends Item {
         return director;
     }
 
-    public void setDirector(String director) {
+    public void setDirector(String director) throws Exception {
+        if (director.isEmpty()) {
+            throw new Exception("Director can not be an empty string");
+        }
         this.director = director;
     }
 

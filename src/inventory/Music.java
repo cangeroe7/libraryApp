@@ -20,7 +20,10 @@ public class Music extends Item {
         return artist;
     }
 
-    public void setArtist(String artist) {
+    public void setArtist(String artist) throws Exception {
+        if (artist.isEmpty()) {
+            throw new Exception("Artist can not be an empty string");
+        }
         this.artist = artist;
     }
 
