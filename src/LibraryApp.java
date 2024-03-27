@@ -3,13 +3,108 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import inventory.*;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.File;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+
+import java.io.IOException;
+
 public class LibraryApp {
+    private final String fileName = "inventory_items.csv";
     private ArrayList<Item> inventoryItems = new ArrayList<>();
  
 
     public static void main(String[] args) {
-        // Instantiate an ArrayList to store inventory items
-    }       
+
+    }    
+    
+    private void readFromFile() throws Exception {
+
+        try (BufferedReader bufReader = new BufferedReader(new FileReader(this.fileName))) {
+
+            bufReader.readLine();
+
+            String line;
+
+            while ((line = bufReader.readLine()) != null) {
+                String[] fields = line.split(",");
+
+                switch (fields[0]) {
+
+                    case "movie":
+                        MovieGenre movieGenre = MovieGenre.fromString(fields[5]);
+                        this.addInventoryItem(fields[1], fields[2], fields[3], fields[4], movieGenre);
+
+                        break;
+
+                    case "music":
+                        MusicGenre musicGenre = MusicGenre.fromString(fields[5]);
+                        this.addInventoryItem(fields[1], fields[2], fields[3], fields[4], musicGenre);
+
+                        break;
+
+                    case "game":
+                        GameGenre gameGenre = GameGenre.fromString(fields[5]);
+                        this.addInventoryItem(fields[1], fields[2], fields[3], fields[4], gameGenre);
+
+                        break;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void writeToFile() {
+
+        File file = new File(this.fileName);
+
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        try (BufferedWriter bufWriter = new BufferedWriter(new FileWriter(this.fileName))) {
+
+            bufWriter.write("item type,title,inventory date,description,director artist developer, genre");
+            bufWriter.newLine();
+
+            for (Item item : this.inventoryItems) {
+                switch (item.getType()) {
+                    case value:
+                        
+                        break;
+                
+                    default:
+                        break;
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    private void addInventoryItem(String title, String inventoryDate, String description, String director, MovieGenre genre) throws Exception {
+        Movie movie = new Movie(title, inventoryDate, description, director, genre);
+        this.inventoryItems.add(movie);
+    }
+
+    private void addInventoryItem(String title, String inventoryDate, String description, String artist, MusicGenre genre) throws Exception {
+        Music music = new Music(title, inventoryDate, description, artist, genre);
+        this.inventoryItems.add(music);
+    }
+
+    private void addInventoryItem(String title, String inventoryDate, String description, String developer, GameGenre genre) throws Exception {
+        Game game = new Game(title, inventoryDate, description, developer, genre);
+        this.inventoryItems.add(game);
+    }
 
     private void addInventoryItem() throws Exception {
         int itemChoice = Input.getIntRange("Select your item type:\nMovie: 1 - Music: 2 - Game: 3", 1, 3);
