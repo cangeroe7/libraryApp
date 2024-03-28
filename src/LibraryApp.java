@@ -17,7 +17,8 @@ public class LibraryApp {
     private ArrayList<Item> inventoryItems = new ArrayList<>();
  
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        LibraryApp app = new LibraryApp();
 
     }    
     
@@ -30,6 +31,9 @@ public class LibraryApp {
             String line;
 
             while ((line = bufReader.readLine()) != null) {
+
+                System.out.println(line);
+
                 String[] fields = line.split(",");
 
                 switch (fields[0]) {
@@ -55,6 +59,7 @@ public class LibraryApp {
             }
         } catch (IOException e) {
             e.printStackTrace();
+
         }
     }
 
@@ -70,25 +75,48 @@ public class LibraryApp {
         
         try (BufferedWriter bufWriter = new BufferedWriter(new FileWriter(this.fileName))) {
 
-            bufWriter.write("item type,title,inventory date,description,director artist developer, genre");
+            bufWriter.write("item type,title,inventory date,description,director artist developer,genre");
             bufWriter.newLine();
 
             for (Item item : this.inventoryItems) {
-                switch (item.getType()) {
-                    case value:
-                        
-                        break;
-                
-                    default:
-                        break;
-                }
+               String csvEntry = this.getCsvString(item);
+               bufWriter.write(csvEntry); 
+               bufWriter.newLine();
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    private String getCsvString(Item item) {
 
+        String csvString = "";
+        csvString += item.getTitle() + ",";
+        csvString += item.getInventoryDate() + ",";
+        csvString += item.getDescription() + ",";
+        
+        if (item instanceof Movie) {
+            Movie movie = (Movie) item;
+            csvString = "movie," + csvString;
+            csvString += movie.getDirector() + ",";
+            csvString += movie.getGenre().toString();
+
+        } else if (item instanceof Music) {
+            Music music = (Music) item;
+            csvString = "music," + csvString;
+            csvString += music.getArtist() + ",";
+            csvString += music.getGenre().toString();
+            
+        } else if (item instanceof Game) {
+            Game game = (Game) item;
+            csvString = "game," + csvString;
+            csvString += game.getDeveloper() + ",";
+            csvString += game.getGenre().toString();
+
+        }
+
+        return csvString;
     }
 
     private void addInventoryItem(String title, String inventoryDate, String description, String director, MovieGenre genre) throws Exception {
