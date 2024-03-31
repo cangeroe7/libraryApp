@@ -62,7 +62,7 @@ public class Item {
     }
 
     public void displayItemLine() {
-        System.out.println("Id: " + this.getId() + " - Title: " + this.getTitle() + " - Inventory Date: " + this.getInventoryDate());
+        System.out.printf("Id: %-5d | Title: %-20s | Inventory Date: %s\n", this.getId(), this.getTitle(), this.getInventoryDate());
     }
 
     public void displayItemBlock() {

@@ -37,7 +37,7 @@ public class Music extends Item {
 
     @Override
     public void displayItemLine() {
-        System.out.println("Id: " + this.getId() + " - Title: " + this.getTitle() + " - Inventory Date: " + this.getInventoryDate() + " - Artist: " + this.getArtist() + " - Music Genre: " + this.getGenre());
+        System.out.printf("Id: %-5d | Title: %-20s | Inventory Date: %-12s | Artist: %-20s | Music Genre: %s\n", this.getId(), this.getTitle(), this.getInventoryDate(), this.getArtist(), this.getGenre());
     }
 
     @Override
