@@ -1,4 +1,7 @@
 import java.util.ArrayList;
+
+import javax.print.attribute.standard.Sides;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import inventory.*;
@@ -13,26 +16,25 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class LibraryApp {
-    private final String fileName = "inventory_items.csv";
+
+    private static final String DOUBLE_DASH_LINE = String.valueOf("=").repeat(50);
+    private static final String SINGLE_DASH_LINE = String.valueOf("-").repeat(50);
+
+    private static final String fileName = "inventory_items.csv";
     private ArrayList<Item> inventoryItems = new ArrayList<>();
  
 
-    public static void main(String[] args) throws Exception {
-        LibraryApp app = new LibraryApp();
-
-    }    
+        
     
     private void readFromFile() throws Exception {
 
-        try (BufferedReader bufReader = new BufferedReader(new FileReader(this.fileName))) {
+        try (BufferedReader bufReader = new BufferedReader(new FileReader(LibraryApp.fileName))) {
 
             bufReader.readLine();
 
             String line;
 
             while ((line = bufReader.readLine()) != null) {
-
-                System.out.println(line);
 
                 String[] fields = line.split(",");
 
@@ -59,13 +61,12 @@ public class LibraryApp {
             }
         } catch (IOException e) {
             e.printStackTrace();
-
         }
     }
 
     private void writeToFile() {
 
-        File file = new File(this.fileName);
+        File file = new File(LibraryApp.fileName);
 
         try {
             file.createNewFile();
@@ -73,7 +74,7 @@ public class LibraryApp {
             e.printStackTrace();
         }
         
-        try (BufferedWriter bufWriter = new BufferedWriter(new FileWriter(this.fileName))) {
+        try (BufferedWriter bufWriter = new BufferedWriter(new FileWriter(LibraryApp.fileName))) {
 
             bufWriter.write("item type,title,inventory date,description,director artist developer,genre");
             bufWriter.newLine();
@@ -113,7 +114,6 @@ public class LibraryApp {
             csvString = "game," + csvString;
             csvString += game.getDeveloper() + ",";
             csvString += game.getGenre().toString();
-
         }
 
         return csvString;
@@ -135,7 +135,23 @@ public class LibraryApp {
     }
 
     private void addInventoryItem() throws Exception {
-        int itemChoice = Input.getIntRange("Select your item type:\nMovie: 1 - Music: 2 - Game: 3", 1, 3);
+        System.out.println(SINGLE_DASH_LINE);
+        System.out.println("Item To Add");
+        System.out.println(SINGLE_DASH_LINE);
+
+        System.out.println("0 = Exit");
+        System.out.println("1 = Movie");
+        System.out.println("2 = Music");
+        System.out.println("3 = Game");
+
+        System.out.println(SINGLE_DASH_LINE);
+        int itemChoice = Input.getIntRange("Item Choice: ", 0, 3);
+        System.err.println(SINGLE_DASH_LINE);
+
+        if (itemChoice == 0) {
+            System.out.println("Exiting...");
+            return;
+        }
 
         Item newItem = null;
 
@@ -162,6 +178,8 @@ public class LibraryApp {
                 String developer = this.inputDeveloper();
                 newItem = new Game(title, inventoryDate, description, developer, gameGenre);
                 break;
+            default:
+                System.out.println("Invalid Menu Choice = " + itemChoice);
         }
 
         this.inventoryItems.add(newItem);
@@ -169,7 +187,9 @@ public class LibraryApp {
 
     private void updateInventoryItem() throws Exception {
 
+        System.out.println(SINGLE_DASH_LINE);
         int id = Input.getInt("Enter the ID of the item to update:\n");
+        System.out.println(SINGLE_DASH_LINE);
         Item item = null;
 
         for (Item inventoryItem : this.inventoryItems) {
@@ -184,25 +204,34 @@ public class LibraryApp {
             return;
         }
 
+        System.out.println(SINGLE_DASH_LINE);
         System.out.println("Select the field to update: ");
-        System.out.println("Title: 1");
-        System.out.println("Inventory Date: 2");
-        System.out.println("Description: 3");
+        System.out.println(SINGLE_DASH_LINE);
+
+        System.out.println("0 = Exit");
+        System.out.println("1 = Title");
+        System.out.println("2 = Inventory Date");
+        System.out.println("3 = Description");
 
         if (item instanceof Movie) {
-            System.out.println("Director: 4");
-            System.out.println("Movie Genre: 5");
+            System.out.println("4 = Director");
+            System.out.println("5 = Movie Genre");
         } else if (item instanceof Music) {
-            System.out.println("Artist: 4");
-            System.out.println("Music Genre: 5");
+            System.out.println("4 = Artist");
+            System.out.println("5 = Music Genre");
         } else if (item instanceof Game) {
-            System.out.println("Developer: 4");
-            System.out.println("Game Genre: 5");
+            System.out.println("4 = Developer");
+            System.out.println("5 = Game Genre");
         }
 
-        int choice = Input.getIntRange("Your choice: ", 1, 5);
+        System.out.println(SINGLE_DASH_LINE);
+        int choice = Input.getIntRange("Your choice: ", 0, 5);
+        System.out.println(SINGLE_DASH_LINE);
 
         switch (choice) {
+            case 0:
+                System.out.println("Exiting...");
+                return;
             case 1:
                 String newTitle = this.inputTitle();
                 item.setTitle(newTitle);
@@ -253,12 +282,16 @@ public class LibraryApp {
                     
                 }
                 break;
+            default:
+                System.out.println("Invalid Menu Choice = " + choice);
         }
     }
 
     private void removeInventoryItem() {
 
+        System.out.println(SINGLE_DASH_LINE);
         int id = Input.getInt("Enter the ID of the item to remove:\n");
+        System.out.println(SINGLE_DASH_LINE);
         
         for (Item item : this.inventoryItems) {
             if (item.getId() == id) {
@@ -353,5 +386,91 @@ public class LibraryApp {
             if (developer.isEmpty()) {System.out.println("The name can not be empty\n");}
         }
         return developer;
+    }
+
+    private void runLibraryApp() throws Exception {
+        boolean keepLooping = true;
+
+
+
+        while (keepLooping) {
+            keepLooping = this.displayMenu();
+        }
+
+    }
+
+    private void displayHeading() {
+        System.out.println(DOUBLE_DASH_LINE);
+        System.out.println("Welcome To The Library App");
+        System.out.println(DOUBLE_DASH_LINE);
+        System.out.println();
+    }
+
+    private void exitLibraryApp() {
+        System.out.println(DOUBLE_DASH_LINE);
+        System.out.println("Thanks For Using The Library App!\n");
+        System.out.println("Saving Library Items To File");
+        System.out.println();
+        System.out.println("...");
+        System.out.println();
+        try {
+            this.writeToFile();
+            System.out.println("Succesfully Saved To File!");
+        } catch (Exception e) {
+            System.out.println("Failed To Write To File");    
+        }
+        System.out.println(DOUBLE_DASH_LINE);
+    }
+
+    private boolean displayMenu() throws Exception {
+
+        System.out.println(SINGLE_DASH_LINE);
+        System.out.println("Main Menu");
+        System.out.println(SINGLE_DASH_LINE);
+
+        System.out.println("0 = Exit Library App");
+        System.out.println("1 = Add New Item");
+        System.out.println("2 = Update Item");
+        System.out.println("3 = Remove Item");
+
+        System.out.println(SINGLE_DASH_LINE);
+        int userInput = Input.getIntRange("Menu Choice: ", 0, 3);           
+        System.out.println(SINGLE_DASH_LINE);
+        System.out.println();
+
+        switch (userInput) {
+            case 0:
+                this.exitLibraryApp();
+                return false;
+            case 1: 
+                this.addInventoryItem();
+                break;
+            case 2:
+                this.updateInventoryItem();
+                break;
+            case 3:
+                this.removeInventoryItem();
+                break;
+            default:
+                System.out.println("Invalid Menu Choice = " + userInput);
+                break;
+        }
+        return true;
+    }
+    
+    public static void main(String[] args) throws Exception {
+        LibraryApp app = new LibraryApp();
+
+        app.displayHeading();
+
+        try {
+            app.readFromFile();
+            app.runLibraryApp();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Sorry but this program ended with an error. Please contact Tom Kraan");
+        }
+
+        Input.sc.close();
     }
 }
