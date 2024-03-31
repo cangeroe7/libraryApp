@@ -34,4 +34,19 @@ public class Movie extends Item {
     public void setGenre(MovieGenre genre) {
         this.genre = genre;
     }
+
+    @Override
+    public void displayItemLine() {
+        System.out.println("Id: " + this.getId() + " - Title: " + this.getTitle() + " - Inventory Date: " + this.getInventoryDate() + " - Director: " + this.getDirector() + " - Movie Genre: " + this.getGenre());
+    }
+
+    @Override
+    public void displayItemBlock() {
+        System.out.println("Id: " + this.getId());
+        System.out.println("Title: " + this.getTitle());
+        System.out.println("Inventory Date: " + this.getInventoryDate());
+        System.out.println("Director: " + this.getDirector());
+        System.out.println("Movie Genre: " + this.getGenre());
+        System.err.println("Description: \n" + this.getDescription());
+    }
 }

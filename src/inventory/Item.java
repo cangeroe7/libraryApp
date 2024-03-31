@@ -41,31 +41,12 @@ public class Item {
         this.title = title;
     }
 
-    public void updateTitle() {
-        String newTitle;
-        while (true) {
-
-            newTitle = Input.getLine("New Inventory Date:\n");
-
-            try {
-                this.setTitle(newTitle);
-            } catch (Exception e) {
-                System.out.println("Title can not be empty!"); 
-            }
-        }
-    }
-
     public String getDescription() {
         return this.description;
     }
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public void updateDescription() {
-        String newDescription = Input.getLine("New Description:\n");
-        this.setDescription(newDescription);
     }
 
     public String getInventoryDate() {
@@ -80,21 +61,14 @@ public class Item {
         }
     }
 
-    public void updateInventoryDate() {
-        String newDate;
-        while (true) {
-
-            newDate = Input.getLine("New Inventory Date:\n");
-
-            try {
-                this.setInventoryDate(newDate);
-            } catch (Exception e) {
-                System.out.println("Invalid date! Must be MM-DD-YYYY\n"); 
-            }
-        }
+    public void displayItemLine() {
+        System.out.println("Id: " + this.getId() + " - Title: " + this.getTitle() + " - Inventory Date: " + this.getInventoryDate());
     }
 
-    public void displayItem() {
-        System.out.println("Display Comes Here");
+    public void displayItemBlock() {
+        System.out.println("Id: " + this.getId());
+        System.out.println("Title: " + this.getTitle());
+        System.out.println("Inventory Date: " + this.getInventoryDate());
+        System.err.println("Description: \n" + this.getDescription());
     }
 }

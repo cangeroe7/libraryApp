@@ -34,4 +34,19 @@ public class Music extends Item {
     public void setGenre(MusicGenre genre) {
         this.genre = genre;
     }
+
+    @Override
+    public void displayItemLine() {
+        System.out.println("Id: " + this.getId() + " - Title: " + this.getTitle() + " - Inventory Date: " + this.getInventoryDate() + " - Artist: " + this.getArtist() + " - Music Genre: " + this.getGenre());
+    }
+
+    @Override
+    public void displayItemBlock() {
+        System.out.println("Id: " + this.getId());
+        System.out.println("Title: " + this.getTitle());
+        System.out.println("Inventory Date: " + this.getInventoryDate());
+        System.out.println("Artist: " + this.getArtist());
+        System.out.println("Music Genre: " + this.getGenre());
+        System.err.println("Description:\n" + this.getDescription());
+    }
 }

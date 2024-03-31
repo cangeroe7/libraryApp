@@ -34,4 +34,19 @@ public class Game extends Item {
     public void setGenre(GameGenre genre) {
         this.genre = genre;
     }
+
+    @Override
+    public void displayItemLine() {
+        System.out.println("Id: " + this.getId() + " - Title: " + this.getTitle() + " - Inventory Date: " + this.getInventoryDate() + " - Developer: " + this.getDeveloper() + " - Game Genre: " + this.getGenre());
+    }
+
+    @Override
+    public void displayItemBlock() {
+        System.out.println("Id: " + this.getId());
+        System.out.println("Title: " + this.getTitle());
+        System.out.println("Inventory Date: " + this.getInventoryDate());
+        System.out.println("Developer: " + this.getDeveloper());
+        System.out.println("Game Genre: " + this.getGenre());
+        System.err.println("Description:\n" + this.getDescription());
+    }
 }
