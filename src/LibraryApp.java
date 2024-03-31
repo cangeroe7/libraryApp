@@ -14,6 +14,9 @@ import java.io.FileWriter;
 
 import java.io.IOException;
 
+/**
+ * The LibraryApp class represents an application for managing a library inventory.
+ */
 public class LibraryApp {
 
     private static final String SINGLE_DASH_LINE = String.valueOf("-").repeat(50);
@@ -23,6 +26,10 @@ public class LibraryApp {
     private static final String fileName = "inventory_items.csv";
     private ArrayList<Item> inventoryItems = new ArrayList<>();
     
+    /**
+     * Reads inventory items from a file and populates the inventoryItems list.
+     * @throws Exception if an error occurs while reading from the file
+     */
     private void readFromFile() throws Exception {
 
         File file = new File(LibraryApp.fileName);
@@ -64,6 +71,9 @@ public class LibraryApp {
         }
     }
 
+    /**
+     * Writes inventory items to a file.
+     */
     private void writeToFile() {
 
         File file = new File(LibraryApp.fileName);
@@ -90,6 +100,11 @@ public class LibraryApp {
         }
     }
 
+    /**
+     * Returns a CSV representation of an item.
+     * @param item The item to represent as CSV
+     * @return A CSV string representing the item
+     */
     private String getCsvString(Item item) {
 
         String csvString = "";
@@ -119,21 +134,52 @@ public class LibraryApp {
         return csvString;
     }
 
+    /**
+     * Adds a movie inventory item to the inventoryItems list.
+     * @param title The title of the movie
+     * @param inventoryDate The inventory date of the movie
+     * @param description The description of the movie
+     * @param director The director of the movie
+     * @param genre The genre of the movie
+     * @throws Exception if an error occurs while adding the item
+     */
     private void addInventoryItem(String title, String inventoryDate, String description, String director, MovieGenre genre) throws Exception {
         Movie movie = new Movie(title, inventoryDate, description, director, genre);
         this.inventoryItems.add(movie);
     }
 
+    /**
+     * Adds a music inventory item to the inventoryItems list.
+     * @param title The title of the music
+     * @param inventoryDate The inventory date of the music
+     * @param description The description of the music
+     * @param artist The artist of the music
+     * @param genre The genre of the music
+     * @throws Exception if an error occurs while adding the item
+     */
     private void addInventoryItem(String title, String inventoryDate, String description, String artist, MusicGenre genre) throws Exception {
         Music music = new Music(title, inventoryDate, description, artist, genre);
         this.inventoryItems.add(music);
     }
 
+    /**
+     * Adds a game inventory item to the inventoryItems list.
+     * @param title The title of the game
+     * @param inventoryDate The inventory date of the game
+     * @param description The description of the game
+     * @param developer The developer of the game
+     * @param genre The genre of the game
+     * @throws Exception if an error occurs while adding the item
+     */
     private void addInventoryItem(String title, String inventoryDate, String description, String developer, GameGenre genre) throws Exception {
         Game game = new Game(title, inventoryDate, description, developer, genre);
         this.inventoryItems.add(game);
     }
 
+    /**
+     * Prompts the user to input information for adding an inventory item.
+     * @throws Exception if an error occurs while adding the item
+     */
     private void addInventoryItem() throws Exception {
         System.out.println(SINGLE_DASH_LINE);
         System.out.println("Item To Add");
@@ -189,6 +235,10 @@ public class LibraryApp {
         this.inventoryItems.add(newItem);
     }
 
+    /**
+     * Prompts the user to update an inventory item.
+     * @throws Exception if an error occurs while updating the item
+     */
     private void updateInventoryItem() throws Exception {
 
         if (this.inventoryItems.isEmpty()) {
@@ -295,6 +345,9 @@ public class LibraryApp {
         }
     }
 
+    /**
+     * Prompts the user to remove an inventory item.
+     */
     private void removeInventoryItem() {
 
         if (this.inventoryItems.isEmpty()) {
@@ -329,6 +382,10 @@ public class LibraryApp {
         System.out.printf("Item ID = %d Does Not Exist\n", id);
     }
 
+    /**
+     * Prompts the user to input a title for an item.
+     * @return The title entered by the user
+     */
    private String inputTitle() {
         String title = "";
         while (title.isEmpty()) {
@@ -341,6 +398,10 @@ public class LibraryApp {
         return title;
     }
 
+    /**
+     * Prompts the user to input a date for an item.
+     * @return The date entered by the user
+     */
     private String inputDate() {
         String date;
         while (true) {
@@ -358,12 +419,20 @@ public class LibraryApp {
         }
     }
 
+    /**
+     * Prompts the user to input a description for an item.
+     * @return The description entered by the user
+     */
     private String inputDescription() {
         String description = Input.getLine("Input The Description (optional):\n\n");
         System.out.println(SINGLE_DASH_LINE);
         return description;
     }
 
+    /**
+     * Prompts the user to input a movie genre.
+     * @return The movie genre chosen by the user
+     */
     private MovieGenre inputMovieGenre() {
         System.out.println("Give The Number Of Your Genre:\n");
         System.out.println(SINGLE_DASH_LINE);
@@ -377,6 +446,10 @@ public class LibraryApp {
         return MovieGenre.values()[Input.getIntRange("Your Choice: ", 0, MovieGenre.values().length - 1)];
     }
 
+    /**
+     * Prompts the user to input a music genre.
+     * @return The music genre chosen by the user
+     */
     private MusicGenre inputMusicGenre() {
         System.out.println("Give The Number Of Your Genre");
         System.out.println(SINGLE_DASH_LINE);
@@ -390,6 +463,10 @@ public class LibraryApp {
         return MusicGenre.values()[Input.getIntRange("Your Choice: ", 0, MusicGenre.values().length - 1)];
     }
 
+    /**
+     * Prompts the user to input a game genre.
+     * @return The game genre chosen by the user
+     */
     private GameGenre inputGameGenre() {
         System.out.println("Give The Number Of Your Genre");
         System.out.println(SINGLE_DASH_LINE);
@@ -403,6 +480,10 @@ public class LibraryApp {
         return GameGenre.values()[Input.getIntRange("Your Choice: ", 0, GameGenre.values().length - 1)];
     }
 
+    /**
+     * Prompts the user to input a director for a movie item.
+     * @return The director entered by the user
+     */
     private String inputDirector() {
         String director = "";
         while (director.isEmpty()) {
@@ -416,6 +497,10 @@ public class LibraryApp {
         return director;
     }
 
+    /**
+     * Prompts the user to input an artist for a music item.
+     * @return The artist entered by the user
+     */
     private String inputArtist() {
         String artist = "";
         while (artist.isEmpty()) {
@@ -429,6 +514,10 @@ public class LibraryApp {
         return artist;
     }
 
+    /**
+     * Prompts the user to input a developer for a game item.
+     * @return The developer entered by the user
+     */
     private String inputDeveloper() {
         String developer = "";
         while (developer.isEmpty()) {
@@ -442,13 +531,9 @@ public class LibraryApp {
         return developer;
     }
 
-    private void runLibraryApp() throws Exception {
-        boolean keepLooping = true;
-        while (keepLooping) {
-            keepLooping = this.displayMenu();
-        }
-    }
-
+    /**
+     * Displays a heading for the application.
+     */
     private void displayHeading() {
         System.err.println();
         System.out.println(DOUBLE_DASH_LINE);
@@ -457,6 +542,10 @@ public class LibraryApp {
         System.out.println();
     }
 
+    /**
+     * Exits the library application.
+     * On exit items are saved to file
+     */
     private void exitLibraryApp() {
         System.out.println(DOUBLE_DASH_LINE);
         System.out.println("Thanks For Using The Library App!");
@@ -480,6 +569,10 @@ public class LibraryApp {
         System.out.println(DOUBLE_DASH_LINE);
     }
 
+    /**
+     * Displays the main menu and handles user input.
+     * @throws Exception if an error occurs while displaying the menu or processing user input
+     */
     private boolean displayMenu() throws Exception {
 
         System.out.println(SINGLE_DASH_LINE);
@@ -519,6 +612,9 @@ public class LibraryApp {
         return true;
     }
 
+    /**
+     * Displays the inventory items.
+     */
     private void displayItems() {
         System.out.println(LONG_DOUBLE_DASH_LINE);
         this.inventoryItems.forEach(item -> {
@@ -528,6 +624,22 @@ public class LibraryApp {
 
     }
     
+    /**
+     * Runs the library application.
+     * @throws Exception if an error occurs while running the application
+     */
+    private void runLibraryApp() throws Exception {
+        boolean keepLooping = true;
+        while (keepLooping) {
+            keepLooping = this.displayMenu();
+        }
+    }
+
+    /**
+     * Main method to run the library application.
+     * Constructs a LibraryApp class, and tries to read from file, and run the app.
+     * @param args Command-line arguments
+     */
     public static void main(String[] args) throws Exception {
         LibraryApp app = new LibraryApp();
 
