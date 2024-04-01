@@ -616,6 +616,10 @@ public class LibraryApp {
      * Displays the inventory items.
      */
     private void displayItems() {
+        if (this.inventoryItems.isEmpty()) {
+            System.out.println("No Items In Inventory");
+            return;
+        }
         System.out.println(LONG_DOUBLE_DASH_LINE);
         this.inventoryItems.forEach(item -> {
             item.displayItemLine();
