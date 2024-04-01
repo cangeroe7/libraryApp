@@ -83,7 +83,7 @@ public class Game extends Item {
      */
     @Override
     public void displayItemLine() {
-        System.out.printf("Id: %-5d | Title: %-20s | Inventory Date: %-12s | Developer: %-20s | Game Genre: %s\n", this.getId(), this.getTitle(), this.getInventoryDate(), this.getDeveloper(), this.getGenre());
+        System.out.printf("Id: %-5d | Title: %-20s | Inventory Date: %-12s | Developer: %-20s | Game Genre:  %s\n", this.getId(), this.getTitle(), this.getInventoryDate(), this.getDeveloper(), this.getGenre());
     }
 
     /**

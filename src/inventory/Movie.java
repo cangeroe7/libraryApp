@@ -83,7 +83,7 @@ public class Movie extends Item {
      */
     @Override
     public void displayItemLine() {
-        System.out.printf("Id: %-5d | Title: %-20s | Inventory Date: %-12s | Director: %-20s | Movie Genre: %s\n", this.getId(), this.getTitle(), this.getInventoryDate(), this.getDirector(), this.getGenre());
+        System.out.printf("Id: %-5d | Title: %-20s | Inventory Date: %-12s | Director:  %-20s | Movie Genre: %s\n", this.getId(), this.getTitle(), this.getInventoryDate(), this.getDirector(), this.getGenre());
     }
 
     /**
