@@ -654,9 +654,7 @@ public class LibraryApp {
 
         CheckInOut checkableItem = (CheckInOut) item;
 
-        System.out.println(SINGLE_DASH_LINE);
         checkableItem.checkOut();
-        System.out.println(SINGLE_DASH_LINE);
     }
 
     private void checkInItem() {
@@ -671,9 +669,7 @@ public class LibraryApp {
 
         CheckInOut checkableItem = (CheckInOut) item;
 
-        System.out.println(SINGLE_DASH_LINE);
         checkableItem.checkIn();
-        System.out.println(SINGLE_DASH_LINE);
     }
 
     /**
