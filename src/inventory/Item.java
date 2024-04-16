@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 /**
  * The {@code Item} class represents an item in the inventory system.
  */
-public class Item {
+public abstract class Item {
     private static int nextId = 0;
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
 
@@ -44,6 +44,29 @@ public class Item {
         this.setDescription(description);
     }
 
+    /**
+     * Constructs an item with the specified title, inventory date, and description.
+     *
+     * @param title         the title of the item
+     * @param inventoryDate the inventory date of the item in the format "MM-DD-YYYY"
+     * @param description   the description of the item
+     * @throws Exception if the title is empty or the date format is invalid
+     */
+    public Item(int id, String title, String inventoryDate, String description) throws Exception {
+        this.id = id;
+        this.setTitle(title);
+        this.setInventoryDate(inventoryDate);
+        this.setDescription(description);
+    }
+    
+    public static void setNextId(int id) {
+        Item.nextId = id;
+    }
+
+    public static int getNextId() {
+        return Item.nextId;
+    }
+    
     /**
      * Retrieves the ID of the item.
      *
@@ -119,17 +142,10 @@ public class Item {
     /**
      * Displays the item information in a single line.
      */
-    public void displayItemLine() {
-        System.out.printf("Id: %-5d | Title: %-20s | Inventory Date: %s\n", this.getId(), this.getTitle(), this.getInventoryDate());
-    }
+    public abstract void displayItemLine();
 
     /**
      * Displays the item information in a block format.
      */
-    public void displayItemBlock() {
-        System.out.println("Id: " + this.getId());
-        System.out.println("Title: " + this.getTitle());
-        System.out.println("Inventory Date: " + this.getInventoryDate());
-        System.err.println("Description: \n" + this.getDescription());
-    }
+    public abstract void displayItemBlock();
 }

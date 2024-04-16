@@ -3,9 +3,10 @@ package inventory;
 /**
  * The {@code Game} class represents a game item in the inventory system.
  */
-public class Game extends Item {
+public class Game extends Item implements CheckInOut {
     private String developer;
     private GameGenre genre;
+    private Boolean checkedOut;
 
     /**
      * Constructs a game with the specified title, inventory date, developer, and genre.
@@ -14,12 +15,14 @@ public class Game extends Item {
      * @param inventoryDate the inventory date of the game in the format "MM-DD-YYYY"
      * @param developer     the developer of the game
      * @param genre         the genre of the game
+     * @param checkedOut    boolean if the item is checked out
      * @throws Exception if the title is empty
      */
-    public Game(String title, String inventoryDate, String developer, GameGenre genre) throws Exception {
+    public Game(String title, String inventoryDate, String developer, GameGenre genre, boolean checkedOut) throws Exception {
         super(title, inventoryDate);
         this.developer = developer;
         this.genre = genre;
+        this.checkedOut = checkedOut;
     }
 
     /**
@@ -36,6 +39,47 @@ public class Game extends Item {
         super(title, inventoryDate, description);
         this.developer = developer;
         this.genre = genre;
+        this.checkedOut = false;
+    }
+
+    /**
+     * Constructs a game with the specified title, inventory date, description, developer, and genre.
+     *
+     * @param title         the title of the game
+     * @param inventoryDate the inventory date of the game in the format "MM-DD-YYYY"
+     * @param description   the description of the game
+     * @param developer     the developer of the game
+     * @param genre         the genre of the game
+     * @param checkedOut    boolean if the item is checked out
+     * @throws Exception if the title is empty
+     */
+    public Game(int id, String title, String inventoryDate, String description, String developer, GameGenre genre, boolean checkedOut) throws Exception {
+        super(id, title, inventoryDate, description);
+        this.developer = developer;
+        this.genre = genre;
+        this.checkedOut = checkedOut;
+    }
+
+    public void checkIn() {
+        if (!this.isCheckedOut()) {
+            System.out.println("Game Is Already Checked In");
+            return;
+        }
+        this.checkedOut = false;
+        System.out.println("You Have Checked In The Game: " + this.getTitle());
+    }
+
+    public void checkOut() {
+        if (this.isCheckedOut()) {
+            System.out.println("Game Is Already Checked Out");
+            return;
+        }
+        this.checkedOut = true;
+        System.out.println("You Have Checked Out The Game: " + this.getTitle());
+    }
+
+    public boolean isCheckedOut() {
+        return this.checkedOut;
     }
 
     /**
@@ -83,7 +127,7 @@ public class Game extends Item {
      */
     @Override
     public void displayItemLine() {
-        System.out.printf("Id: %-5d | Title: %-20s | Inventory Date: %-12s | Developer: %-20s | Game Genre:  %s\n", this.getId(), this.getTitle(), this.getInventoryDate(), this.getDeveloper(), this.getGenre());
+        System.out.printf("Id: %-5d | Title: %-16s | Checked Out: %-6b | Inventory Date: %-10s | Developer: %-16s | Game Genre:  %s\n", this.getId(), this.getTitle(), this.isCheckedOut(),  this.getInventoryDate(), this.getDeveloper(), this.getGenre());
     }
 
     /**

@@ -45,23 +45,25 @@ public class LibraryApp {
 
                 String[] fields = line.split(",");
 
-                switch (fields[0]) {
+                int id = Integer.valueOf(fields[1]);
+                if (id >= Item.getNextId()) {Item.setNextId(id + 1);}
 
+                switch (fields[0]) {
                     case "movie":
-                        MovieGenre movieGenre = MovieGenre.fromString(fields[5]);
-                        this.addInventoryItem(fields[1], fields[2], fields[3], fields[4], movieGenre);
+                        MovieGenre movieGenre = MovieGenre.fromString(fields[6]);
+                        this.addInventoryItem(id, fields[2], fields[3], fields[4], fields[5], movieGenre, fields[7].equals("true"));
 
                         break;
 
                     case "music":
-                        MusicGenre musicGenre = MusicGenre.fromString(fields[5]);
-                        this.addInventoryItem(fields[1], fields[2], fields[3], fields[4], musicGenre);
+                        MusicGenre musicGenre = MusicGenre.fromString(fields[6]);
+                        this.addInventoryItem(id, fields[2], fields[3], fields[4], fields[5], musicGenre, fields[7].equals("true"));
 
                         break;
 
                     case "game":
-                        GameGenre gameGenre = GameGenre.fromString(fields[5]);
-                        this.addInventoryItem(fields[1], fields[2], fields[3], fields[4], gameGenre);
+                        GameGenre gameGenre = GameGenre.fromString(fields[6]);
+                        this.addInventoryItem(id, fields[2], fields[3], fields[4], fields[5], gameGenre, fields[7].equals("true"));
 
                         break;
                 }
@@ -86,7 +88,7 @@ public class LibraryApp {
         
         try (BufferedWriter bufWriter = new BufferedWriter(new FileWriter(LibraryApp.fileName))) {
 
-            bufWriter.write("item type,title,inventory date,description,director artist developer,genre");
+            bufWriter.write("item type,id,title,inventory date,description,director artist developer,genre,checked out");
             bufWriter.newLine();
 
             for (Item item : this.inventoryItems) {
@@ -106,74 +108,87 @@ public class LibraryApp {
      * @return A CSV string representing the item
      */
     private String getCsvString(Item item) {
-
         String csvString = "";
+        csvString += item.getId() + ",";
         csvString += item.getTitle() + ",";
         csvString += item.getInventoryDate() + ",";
         csvString += item.getDescription() + ",";
-        
+
         if (item instanceof Movie) {
             Movie movie = (Movie) item;
             csvString = "movie," + csvString;
             csvString += movie.getDirector() + ",";
-            csvString += movie.getGenre().toString();
+            csvString += movie.getGenre().toString() + ",";
+            csvString += movie.isCheckedOut();
 
         } else if (item instanceof Music) {
             Music music = (Music) item;
             csvString = "music," + csvString;
             csvString += music.getArtist() + ",";
-            csvString += music.getGenre().toString();
+            csvString += music.getGenre().toString() + ",";
+            csvString += music.isCheckedOut();
             
         } else if (item instanceof Game) {
             Game game = (Game) item;
             csvString = "game," + csvString;
             csvString += game.getDeveloper() + ",";
-            csvString += game.getGenre().toString();
+            csvString += game.getGenre().toString() + ",";
+            csvString += game.isCheckedOut();
         }
 
         return csvString;
     }
 
+    private <T extends Item> void addToInventoryItems(T item) {
+        inventoryItems.add(item);
+    }
+
     /**
      * Adds a movie inventory item to the inventoryItems list.
+     * @param id The id of the item 
      * @param title The title of the movie
      * @param inventoryDate The inventory date of the movie
      * @param description The description of the movie
      * @param director The director of the movie
      * @param genre The genre of the movie
+     * @param checkedOut If the item is checked out
      * @throws Exception if an error occurs while adding the item
      */
-    private void addInventoryItem(String title, String inventoryDate, String description, String director, MovieGenre genre) throws Exception {
-        Movie movie = new Movie(title, inventoryDate, description, director, genre);
-        this.inventoryItems.add(movie);
+    private void addInventoryItem(int id, String title, String inventoryDate, String description, String director, MovieGenre genre, boolean checkedOut) throws Exception {
+        Movie movie = new Movie(id, title, inventoryDate, description, director, genre, checkedOut);
+        this.addToInventoryItems(movie);
     }
 
     /**
      * Adds a music inventory item to the inventoryItems list.
+     * @param id The id of the item 
      * @param title The title of the music
      * @param inventoryDate The inventory date of the music
      * @param description The description of the music
      * @param artist The artist of the music
      * @param genre The genre of the music
+     * @param checkedOut If the item is checked out
      * @throws Exception if an error occurs while adding the item
      */
-    private void addInventoryItem(String title, String inventoryDate, String description, String artist, MusicGenre genre) throws Exception {
-        Music music = new Music(title, inventoryDate, description, artist, genre);
-        this.inventoryItems.add(music);
+    private void addInventoryItem(int id, String title, String inventoryDate, String description, String artist, MusicGenre genre, boolean checkedOut) throws Exception {
+        Music music = new Music(id, title, inventoryDate, description, artist, genre, checkedOut);
+        this.addToInventoryItems(music);
     }
 
     /**
      * Adds a game inventory item to the inventoryItems list.
+     * @param id The id of the item 
      * @param title The title of the game
      * @param inventoryDate The inventory date of the game
      * @param description The description of the game
      * @param developer The developer of the game
      * @param genre The genre of the game
+     * @param checkedOut If the item is checked out
      * @throws Exception if an error occurs while adding the item
      */
-    private void addInventoryItem(String title, String inventoryDate, String description, String developer, GameGenre genre) throws Exception {
-        Game game = new Game(title, inventoryDate, description, developer, genre);
-        this.inventoryItems.add(game);
+    private void addInventoryItem(int id, String title, String inventoryDate, String description, String developer, GameGenre genre, boolean checkedOut) throws Exception {
+        Game game = new Game(id, title, inventoryDate, description, developer, genre, checkedOut);
+        this.addToInventoryItems(game);
     }
 
     /**
@@ -231,19 +246,13 @@ public class LibraryApp {
             default:
                 System.out.println("Invalid Menu Choice = " + itemChoice);
         }
-
-        this.inventoryItems.add(newItem);
+        this.addToInventoryItems(newItem);
     }
 
-    /**
-     * Prompts the user to update an inventory item.
-     * @throws Exception if an error occurs while updating the item
-     */
-    private void updateInventoryItem() throws Exception {
-
+    private Item pickInventoryItem() {
         if (this.inventoryItems.isEmpty()) {
             System.out.println("Inventory Is Empty");
-            return;
+            return null;
         }
         int id = Input.getInt("Enter The ID Of The Item To Update: ");
         System.out.println(SINGLE_DASH_LINE);
@@ -255,9 +264,21 @@ public class LibraryApp {
                 break;
             }
         }
+        if (item == null) {
+            System.out.println("Item With ID: " + id + " Does Not Exist");
+        }
+        return item;
+    }
+
+    /**
+     * Prompts the user to update an inventory item.
+     * @throws Exception if an error occurs while updating the item
+     */
+    private void updateInventoryItem() throws Exception {
+
+        Item item = this.pickInventoryItem();
 
         if (item == null) {
-            System.out.printf("No Item Found With ID: %d\n", id);
             return;
         }
 
@@ -315,6 +336,7 @@ public class LibraryApp {
                     Music musicItem = (Music) item;
                     String newArtist = this.inputArtist();
                     musicItem.setArtist(newArtist);
+
                 } else if (item instanceof Game) {
                     Game gameItem = (Game) item;
                     String newDeveloper = this.inputDeveloper();
@@ -386,7 +408,7 @@ public class LibraryApp {
      * Prompts the user to input a title for an item.
      * @return The title entered by the user
      */
-   private String inputTitle() {
+    private String inputTitle() {
         String title = "";
         while (title.isEmpty()) {
             title = Input.getLine("Input Title: ");
@@ -584,9 +606,11 @@ public class LibraryApp {
         System.out.println("2 = Update Item");
         System.out.println("3 = Remove Item");
         System.out.println("4 = Display Items");
+        System.out.println("5 = Check Out Item");
+        System.out.println("6 = Check In Item");
 
         System.out.println(SINGLE_DASH_LINE);
-        int userInput = Input.getIntRange("Menu Choice: ", 0, 4);           
+        int userInput = Input.getIntRange("Menu Choice: ", 0, 6);           
         System.out.println(SINGLE_DASH_LINE);
 
         switch (userInput) {
@@ -605,11 +629,51 @@ public class LibraryApp {
             case 4:
                 this.displayItems();
                 break;
+            case 5:
+                this.checkOutItem();
+                break;   
+            case 6:
+                this.checkInItem();
+                break;
             default:
                 System.out.println("Invalid Menu Choice = " + userInput);
                 break;
         }
         return true;
+    }
+
+    private void checkOutItem() {
+        Item item = this.pickInventoryItem();
+        if (item == null) {
+            return;
+        }
+        
+        if (!(item instanceof CheckInOut)) {
+            System.out.println("You Can Not Check Out This Item");
+        }
+
+        CheckInOut checkableItem = (CheckInOut) item;
+
+        System.out.println(SINGLE_DASH_LINE);
+        checkableItem.checkOut();
+        System.out.println(SINGLE_DASH_LINE);
+    }
+
+    private void checkInItem() {
+        Item item = this.pickInventoryItem();
+        if (item == null) {
+            return;
+        }
+        
+        if (!(item instanceof CheckInOut)) {
+            System.out.println("You Can Not Check In This Item");
+        }
+
+        CheckInOut checkableItem = (CheckInOut) item;
+
+        System.out.println(SINGLE_DASH_LINE);
+        checkableItem.checkIn();
+        System.out.println(SINGLE_DASH_LINE);
     }
 
     /**
